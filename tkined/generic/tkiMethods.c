@@ -987,6 +987,9 @@ AcceptProc(ClientData clientData, Tcl_Channel channel, char *hostName, int port)
     int code;
     Tki_Object *object = (Tki_Object *) clientData;
 
+    /*
+     * Local interface may now present itself in IPV6 format
+     */
     if (strcmp(hostName, "127.0.0.1") != 0 && strcmp(hostName, "::1")) {
 	Tcl_Channel errChannel = Tcl_GetStdChannel(TCL_STDERR);
 	if (errChannel) {
