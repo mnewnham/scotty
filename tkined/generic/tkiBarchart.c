@@ -102,7 +102,7 @@ static char *           PrintBarchartValues (ClientData
                             int offset, Tcl_FreeProc **freeProcPtr);
 static int              BarchartValues _ANSI_ARGS_ ((Tcl_Interp *interp,
 			    Tk_Canvas canvas, Tk_Item *itemPtr, 
-                            int argc, char **argv, int numPoints);
+                            int argc, char **argv, int numPoints));
 static void             ScaleBarchart (Tk_Canvas canvas,
                             Tk_Item *itemPtr, double originX, double originY,
                             double scaleX, double scaleY);
