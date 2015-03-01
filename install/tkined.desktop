@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=Tkined
+Comment=Graphical Network Management Tool
+Exec=/usr/local/bin/tkined1.5.0
+Icon=tkined
+Terminal=false

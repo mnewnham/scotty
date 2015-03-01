@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=Scotty
+Comment=Command Line Network Management Tool
+Exec=/usr/local/bin/scotty3.0.0
+Icon=tkined
+Terminal=true
