@@ -1,6 +1,8 @@
+Visit the main website at [http://scotty.newnhams.com](http://scotty.newnhams.com)
+
 Welcome to the Scotty Tcl extension for network management
 
-by Juergen Schoenwaelder and many contributors.  Maintained by FlightAware LLC
+by Juergen Schoenwaelder and many contributors.  
 
 Introduction
 ---
