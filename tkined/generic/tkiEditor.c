@@ -1062,7 +1062,7 @@ do_set (editor, interp, line)
 
 
     if (do_ined (editor, interp, line) == TCL_OK) {
-	if (tki_Debug)
+
 
 	line = Tcl_SetVar (interp, var, Tcl_GetStringResult(interp), TCL_GLOBAL_ONLY);
 	if (line) {
