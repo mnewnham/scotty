@@ -39,17 +39,17 @@
  */
 
 static int 
-tkined_mark_box       (ClientData clientData, Tcl_Interp *interp,
-				   int argc, char **argv);
+tkined_mark_box       _ANSI_ARGS_((ClientData clientData, Tcl_Interp *interp,
+				   int argc, char **argv));
 static int 
-tkined_mark_points    (ClientData clientData, Tcl_Interp *interp,
-				   int argc, char **argv);
+tkined_mark_points    _ANSI_ARGS_((ClientData clientData, Tcl_Interp *interp,
+				   int argc, char **argv));
 static void 
-mark_one_item         (Tcl_Interp *interp, double x, double y, 
-				   char *canvas, char *item);
+mark_one_item         _ANSI_ARGS_((Tcl_Interp *interp, double x, double y, 
+				   char *canvas, char *item));
 static int 
-blt_axes_time	      (ClientData clientData, Tcl_Interp *interp,
-				   int argc, char **argv);
+blt_axes_time	      _ANSI_ARGS_((ClientData clientData, Tcl_Interp *interp,
+				   int argc, char **argv));
 
 /*
  * Linkage to some external funtions and global variables.
@@ -57,6 +57,9 @@ blt_axes_time	      (ClientData clientData, Tcl_Interp *interp,
 
 extern char* tkiTcl_tcl;
 
+/*
+ * Setting this flag to 1 produces copious debug output to stderr
+*/
 int tki_Debug = 0;
 
 /* 
@@ -65,7 +68,8 @@ int tki_Debug = 0;
  */
 
 int
-TkiInit(Tcl_Interp *interp)
+TkiInit(interp)
+    Tcl_Interp *interp;
 {
     int code;
     char *library, *tmp;
@@ -273,7 +277,11 @@ mark_one_item(interp, x, y, canvas, item)
 }
 
 static int 
-tkined_mark_points(ClientData clientData, Tcl_Interp *interp, int argc, char **argv)
+tkined_mark_points(clientData, interp, argc, argv)
+    ClientData clientData;
+    Tcl_Interp *interp;
+    int argc;
+    char **argv;
 {
     int ret;
     int largc;
@@ -290,8 +298,10 @@ tkined_mark_points(ClientData clientData, Tcl_Interp *interp, int argc, char **a
     ret = Tcl_VarEval (interp, argv[1], " coords ", argv[2], (char *) NULL);
     if (ret != TCL_OK) return ret;
 
-    Tcl_SplitList (interp, interp->result, &largc, &largv);
-
+    if (tki_Debug)
+	fprintf(stderr,"splitlist in mark points\n");
+    Tcl_SplitList (interp, Tcl_GetStringResult(interp), &largc, &largv);
+//Tcl_SplitList (interp, interp->result, &largc, &largv);
     x = (double *) ckalloc (largc * sizeof(double));
     y = (double *) ckalloc (largc * sizeof(double));
 
@@ -331,7 +341,11 @@ tkined_mark_points(ClientData clientData, Tcl_Interp *interp, int argc, char **a
 }
 
 static int 
-tkined_mark_box (ClientData clientData, Tcl_Interp *interp, int argc, char **argv)
+tkined_mark_box (clientData, interp, argc, argv)
+    ClientData clientData;
+    Tcl_Interp *interp;
+    int argc;
+    char **argv;
 {
     int ret;
     int largc;
@@ -346,8 +360,8 @@ tkined_mark_box (ClientData clientData, Tcl_Interp *interp, int argc, char **arg
     ret = Tcl_VarEval (interp, argv[1], " bbox ", argv[2], (char *) NULL);
     if (ret != TCL_OK) return ret;
 
-    Tcl_SplitList (interp, interp->result, &largc, &largv);
-
+    Tcl_SplitList (interp, Tcl_GetStringResult(interp), &largc, &largv);
+  
     Tcl_GetDouble (interp, largv[0], &x1);
     Tcl_GetDouble (interp, largv[1], &y1);
     Tcl_GetDouble (interp, largv[2], &x2);
@@ -381,11 +395,17 @@ tkined_mark_box (ClientData clientData, Tcl_Interp *interp, int argc, char **arg
  */
 
 static int
-blt_axes_time(ClientData clientData, Tcl_Interp *interp, int argc, char **argv)
+blt_axes_time(clientData, interp, argc, argv)
+    ClientData clientData;
+    Tcl_Interp *interp;
+    int argc;
+    char **argv;
 {
     double val;
     time_t clock;
     struct tm *ltime;
+    char editorItem[20];
+
 
     if (argc != 3 ) return TCL_ERROR;
 
@@ -393,9 +413,11 @@ blt_axes_time(ClientData clientData, Tcl_Interp *interp, int argc, char **argv)
 
     clock = (time_t) val;
     ltime = localtime(&clock);
-    sprintf(interp->result, "%02d:%02d", ltime->tm_hour, ltime->tm_min);
-
+    if (tki_Debug)
+	fprintf(stderr,"Mapping time axes\n");
+    sprintf(editorItem,"%02d:%02d", ltime->tm_hour, ltime->tm_min);
+    Tcl_SetResult(interp,editorItem,TCL_VOLATILE);
+    //sprintf(interp->result, "%02d:%02d", ltime->tm_hour, ltime->tm_min);
     return TCL_OK;
 }
-
 

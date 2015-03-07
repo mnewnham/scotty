@@ -26,7 +26,7 @@ static char *flashIcon = "optionFlashIcon";
  */
 
 static void
-FlashProc		(ClientData clientData);
+FlashProc		_ANSI_ARGS_((ClientData clientData));
 
 /*
  * The FlashProc callback flashes every object in the flashList 
@@ -34,13 +34,16 @@ FlashProc		(ClientData clientData);
  */
 
 static void
-FlashProc (ClientData clientData)
+FlashProc (clientData)
+    ClientData clientData;
 {
     Tcl_Interp *interp = (Tcl_Interp *) clientData;
     Tki_Object *object;
     char *color;
     FlashItem *p;
     int max = 0;
+
+    char editorResult[100];
 
     Tk_Window window;
     Tk_Window tkwin = Tk_MainWindow(interp);
@@ -78,12 +81,15 @@ FlashProc (ClientData clientData)
 
 #if 1
 	if (object->editor) {
-	    Tki_EditorAttribute(object->editor, interp, 1, &flashIcon);
-	    if ((*interp->result != '\0') &&
-		(strcmp(interp->result, "yes") == 0 
-		 || strcmp(interp->result, "true") == 0
-		 || strcmp(interp->result, "on") == 0
-		 || strcmp(interp->result, "1") == 0)) {
+           	    
+	    strcpy(editorResult,Tcl_GetStringResult(interp));
+	    
+            Tki_EditorAttribute(object->editor, interp, 1, &flashIcon);
+	    if ((*editorResult != '\0') &&
+		(strcmp(editorResult, "yes") == 0 
+		 || strcmp(editorResult, "true") == 0
+		 || strcmp(editorResult, "on") == 0
+		 || strcmp(editorResult, "1") == 0)) {
 		char *buf = (object->flash % 2) ? "icon" : "noicon";
 		Tcl_VarEval(interp, "if ![winfo ismapped ", 
 			    object->editor->toplevel,
@@ -130,7 +136,9 @@ FlashProc (ClientData clientData)
  */
 
 void
-TkiFlash (Tcl_Interp *interp, Tki_Object *object)
+TkiFlash (interp, object)
+    Tcl_Interp *interp;
+    Tki_Object *object;
 {
     FlashItem *p;
 
@@ -165,4 +173,3 @@ TkiFlash (Tcl_Interp *interp, Tki_Object *object)
 	p->nextPtr = NULL;
     }
 }
-

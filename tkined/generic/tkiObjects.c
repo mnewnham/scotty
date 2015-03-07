@@ -33,17 +33,18 @@ static int ignoretrace = 0;
  */
 
 static int 
-ObjectCommand	      (ClientData clientData, Tcl_Interp *interp,
-				   int argc, char **argv);
+ObjectCommand	      _ANSI_ARGS_((ClientData clientData, Tcl_Interp *interp,
+				   int argc, char **argv));
 static void 
-do_debug              (Tki_Object *object, Tcl_Interp *interp,
-				   int argc, char **argv, char *result);
+do_debug              _ANSI_ARGS_((Tki_Object *object, Tcl_Interp *interp,
+				   int argc, char **argv, char *result));
 /* 
  * Find an object by its id.
  */
 
 Tki_Object* 
-Tki_LookupObject (char *id)
+Tki_LookupObject (id)
+     char *id;
 {
     Tcl_HashEntry *entryPtr;
 
@@ -70,7 +71,13 @@ Tki_LookupObject (char *id)
  */
 
 void
-TkiTrace (Tki_Editor *editor, Tki_Object *object, char *cmd, int argc, char **argv, char *result)
+TkiTrace (editor, object, cmd, argc, argv, result)
+    Tki_Editor *editor;
+    Tki_Object *object;
+    char *cmd;
+    int argc;
+    char **argv;
+    char *result;
 {
 
     /* **** start of hack **** */
@@ -190,7 +197,12 @@ TkiTrace (Tki_Editor *editor, Tki_Object *object, char *cmd, int argc, char **ar
  */
 
 static void 
-do_debug (Tki_Object *object, Tcl_Interp *interp, int argc, char **argv, char *result)
+do_debug (object, interp, argc, argv, result)
+    Tki_Object *object;
+    Tcl_Interp *interp;
+    int argc;
+    char **argv;
+    char *result;
 {
     int i;
 
@@ -224,7 +236,11 @@ do_debug (Tki_Object *object, Tcl_Interp *interp, int argc, char **argv, char *r
  */
 
 int 
-Tki_CreateObject (ClientData clientData, Tcl_Interp *interp, int argc, char **argv)
+Tki_CreateObject (clientData, interp, argc, argv)
+    ClientData clientData;
+    Tcl_Interp *interp;
+    int argc;
+    char **argv;
 {
     Tki_Object *object;
     Tcl_HashEntry *entryPtr;
@@ -299,7 +315,8 @@ Tki_CreateObject (ClientData clientData, Tcl_Interp *interp, int argc, char **ar
  */
 
 void 
-Tki_DeleteObject (ClientData clientData)
+Tki_DeleteObject (clientData)
+     ClientData clientData;
 {
     Tcl_HashEntry *entryPtr;
     Tcl_HashSearch ht_search;
@@ -362,7 +379,11 @@ Tki_DeleteObject (ClientData clientData)
  */
 
 int 
-ined (ClientData clientData, Tcl_Interp *interp, int argc, char **argv)
+ined (clientData, interp, argc, argv)
+    ClientData clientData;
+    Tcl_Interp *interp;
+    int argc;
+    char **argv;
 {
     Tki_Object *object = (Tki_Object *) clientData;
     char *cmd;
@@ -373,6 +394,10 @@ ined (ClientData clientData, Tcl_Interp *interp, int argc, char **argv)
     Tcl_HashSearch ht_search;
     int update = 1;
     Tcl_CmdInfo	info;
+    
+    char pageSettings[50];
+    char canvasData[50];
+    char graphData[50];
     
     /* ignore everything not starting with the key word 'ined' */
     
@@ -442,8 +467,11 @@ ined (ClientData clientData, Tcl_Interp *interp, int argc, char **argv)
 		}
 	    }
 	    Tcl_ResetResult (interp);
-	    sprintf (interp->result, "%s %s", object->editor->pagesize, 
+
+	    
+	    sprintf (pageSettings, "%s %s", object->editor->pagesize, 
 		     object->editor->landscape ? "landscape" : "portrait");
+	    Tcl_SetResult(interp,pageSettings,TCL_VOLATILE);
 	}
 	ignoretrace = 0;
 	return TCL_OK;
@@ -484,7 +512,10 @@ ined (ClientData clientData, Tcl_Interp *interp, int argc, char **argv)
 	    if (strcmp (obj->canvas, object->canvas) == 0) {
 		result = m_retrieve (interp, obj, 0, (char **) NULL);
 		if (result == TCL_OK) {
-		    Tcl_DStringAppendElement (&ds, interp->result);
+		    if (tki_Debug)
+			sprintf(stderr,"Catch retrieve no-args\n"); 
+		    Tcl_DStringAppendElement (&ds, Tcl_GetStringResult(interp));
+		//Tcl_DStringAppendElement (&ds, interp->result);
 		}
 		Tcl_ResetResult (interp);
 	    }
@@ -503,8 +534,10 @@ ined (ClientData clientData, Tcl_Interp *interp, int argc, char **argv)
 	if (object->editor) {
 	    Tki_EditorPostScript (object->editor, interp, 0, (char **) NULL);
 	}
-
-	Tcl_SetResult (interp, ckstrdupnn(interp->result), TCL_DYNAMIC);
+	if (tki_Debug)
+	    fprintf(stderr,"dump editor postcript\n");
+	Tcl_SetResult (interp, ckstrdupnn(Tcl_GetStringResult(interp)), TCL_DYNAMIC);
+	//Tcl_SetResult (interp, ckstrdupnn(interp->result), TCL_DYNAMIC);
 	return TCL_OK;
     }
 
@@ -514,11 +547,18 @@ ined (ClientData clientData, Tcl_Interp *interp, int argc, char **argv)
 	&& (argv[1][0] == 's')
         && (strcmp (argv[1], "size") == 0)) {
 	if (object->editor) {
+	   	    
 	    Tcl_ResetResult (interp);
-	    sprintf (interp->result, "0 0 %d %d", 
+	
+	    
+            sprintf (canvasData, "0 0 %d %d", 
 		     object->editor->width, object->editor->height);
+
+	    Tcl_SetResult(interp,canvasData,TCL_VOLATILE);
+	    
 	    if (tki_Debug) 
-	      do_debug (object, interp, argc, argv, interp->result);
+	      do_debug (object, interp, argc, argv, canvasData);
+
 	}
 	ignoretrace = 0;
 	return TCL_OK;
@@ -582,12 +622,17 @@ ined (ClientData clientData, Tcl_Interp *interp, int argc, char **argv)
 	    
 	    if ((argv[2][0] == 'c') && (strcmp(argv[2], "create") == 0)) {
 
+		if (tki_Debug)
+		    fprintf(stderr,"Start Canvas Create Process\n");		
 		cmd = Tcl_Merge (argc-1, argv+1);
 		result = Tcl_Eval (interp, cmd);
 		ckfree (cmd);
 
 		if (result == TCL_OK) {
-		    obj = Tki_LookupObject (interp->result);
+		    
+		   // obj = Tki_LookupObject (interp->result);
+		    obj = Tki_LookupObject (Tcl_GetStringResult(interp));
+		    
 		    if (obj->type == TKINED_MENU) {
 			STRCOPY (obj->links, object->id);
 		    }
@@ -598,18 +643,30 @@ ined (ClientData clientData, Tcl_Interp *interp, int argc, char **argv)
 		    TkiTrace (obj->editor, (Tki_Object *) NULL, 
 			    (char *) NULL, 0, (char **) NULL, (char *) NULL);
 		    if (obj->type == TKINED_GRAPH) {
+			if (tki_Debug)
+			    fprintf(stderr,"Start Graphing Process\n");					
+			
+		        strcpy(graphData,Tcl_GetStringResult(interp));
+
 			Tki_EditorGraph (obj->editor, interp, 
 					 0, (char **) NULL);
 			Tcl_AppendResult (interp, ".blt", (char *) NULL);
-			m_canvas (interp, obj, 1, &interp->result);
+			//m_canvas (interp, obj, 1, &interp->result);
+			m_canvas (interp, obj, 1, &graphData);
+		    
 		    } else {
+			if (tki_Debug)
+			    fprintf(stderr,"Call to object->canvas\n");	
+			
 			m_canvas (interp, obj, 1, &object->canvas);
 		    }
+
 		    Tcl_SetResult (interp, obj->id, TCL_STATIC);
 		}
           } else if ((argv[2][0] == 'e') && (strcmp(argv[2], "eval") == 0)) {
 
 	      char *p;
+	      char pResult[20];
 
               /* 
 	       * Hand the rest of the command off for evaluation in
@@ -627,8 +684,11 @@ ined (ClientData clientData, Tcl_Interp *interp, int argc, char **argv)
 	       * It seems we also have to replace any newlines with
 	       * semicolons to keep the Tcl parser happy later on.
 	       */
+              if (tki_Debug)
+		fprintf(stderr,"ined replace newline\n");
 
-	      for (p = interp->result; *p; p++) {
+	      strcpy(pResult,Tcl_GetStringResult(interp));
+	      for (p = pResult; *p; p++) {
 		  if (*p == '\n') *p = ';';
 	      }
 
@@ -657,7 +717,8 @@ ined (ClientData clientData, Tcl_Interp *interp, int argc, char **argv)
     }
 
     if (update) {
-	tmp = ckstrdup (interp->result);
+		
+	tmp = ckstrdup (Tcl_GetStringResult(interp));
         Tcl_Eval (interp, "update idletask");
 	Tcl_SetResult (interp, tmp, TCL_DYNAMIC);
     }
@@ -764,7 +825,8 @@ receive(clientData, mask)
 	/* write back an acknowledge and the result */
 	    
 	if (Tcl_DStringLength (&buf) > 0) {
-	    Tcl_DStringAppend (&buf, interp->result, -1);
+	  	
+	    Tcl_DStringAppend (&buf, Tcl_GetStringResult(interp), -1);
 	    Tcl_DStringAppend (&buf, "\n", 1);
 	    
 	    len = Tcl_DStringLength (&buf);
@@ -981,11 +1043,17 @@ static Method methodTable[] = {
  */
 
 static int
-ObjectCommand (ClientData clientData, Tcl_Interp *interp, int argc, char **argv)
+ObjectCommand (clientData, interp, argc, argv)
+    ClientData clientData;
+    Tcl_Interp *interp;
+    int argc;
+    char **argv;
 {
     Tki_Object *object = (Tki_Object *) clientData;
     Method *ds;
     int res;
+    char methodResult[1000];
+
 
     if (argc < 2) {
 	Tcl_SetResult (interp, "wrong # of args", TCL_STATIC);
@@ -1002,7 +1070,12 @@ ObjectCommand (ClientData clientData, Tcl_Interp *interp, int argc, char **argv)
 	res = (ds->fnx)(interp, object, argc-2, argv+2);
 	if (res == TCL_OK) {
 	    if (tki_Debug && (strcmp(argv[1], "create") != 0)) {
-		do_debug (object, interp, argc-1, argv+1, interp->result);
+		strcpy(methodResult,Tcl_GetStringResult(interp));
+		sprintf(stderr,"------------ DUMP THIS ---------\n");
+		//sprintf(stderr,methodResult);
+		do_debug (object, interp, argc-1, argv+1, methodResult);
+		//do_debug (object, interp, argc-1, argv+1, interp->result);
+		//sprintf(stderr,"---------------------\n");
 	    }
 	}
 
@@ -1039,7 +1112,12 @@ ObjectCommand (ClientData clientData, Tcl_Interp *interp, int argc, char **argv)
  */
 
 int
-TkiNoTrace (int (*method)(), Tcl_Interp *interp, Tki_Object *object, int argc, char **argv)
+TkiNoTrace (method, interp, object, argc, argv)
+    int (*method)();
+    Tcl_Interp *interp;
+    Tki_Object *object;
+    int argc;
+    char **argv;
 {
     int nt = ignoretrace;
     int res;
@@ -1050,4 +1128,3 @@ TkiNoTrace (int (*method)(), Tcl_Interp *interp, Tki_Object *object, int argc, c
 
     return res;
 }
-
