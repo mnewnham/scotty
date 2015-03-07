@@ -27,93 +27,97 @@ static char *defaultName = "noname.tki"; /* the default map name */
  */
 
 static void
-do_delete	(Tki_Editor *editor, Tcl_Interp *interp, 
-			     Tcl_DString *dstp);
+do_delete	_ANSI_ARGS_((Tki_Editor *editor, Tcl_Interp *interp, 
+			     Tcl_DString *dstp));
 static void
-do_dump		(Tki_Editor *editor, Tcl_Interp *interp, 
-			     Tki_Object *group, Tcl_DString *dstp);
+do_dump		_ANSI_ARGS_((Tki_Editor *editor, Tcl_Interp *interp, 
+			     Tki_Object *group, Tcl_DString *dstp));
 static int 
-do_ined		(Tki_Editor *editor, Tcl_Interp *interp,
-			     char *line);
+do_ined		_ANSI_ARGS_((Tki_Editor *editor, Tcl_Interp *interp,
+			     char *line));
 static int 
-do_set		(Tki_Editor *editor, Tcl_Interp *interp, 
-			     char *line);
+do_set		_ANSI_ARGS_((Tki_Editor *editor, Tcl_Interp *interp, 
+			     char *line));
 
 static int
-GetId		(Tki_Editor *editor, Tcl_Interp *interp, 
-			     int argc, char **argv);
+GetId		_ANSI_ARGS_((Tki_Editor *editor, Tcl_Interp *interp, 
+			     int argc, char **argv));
 static int
-GetWidth	(Tki_Editor *editor, Tcl_Interp *interp, 
-			     int argc, char **argv);
+GetWidth	_ANSI_ARGS_((Tki_Editor *editor, Tcl_Interp *interp, 
+			     int argc, char **argv));
 static int
-GetHeight	(Tki_Editor *editor, Tcl_Interp *interp, 
-			     int argc, char **argv);
+GetHeight	_ANSI_ARGS_((Tki_Editor *editor, Tcl_Interp *interp, 
+			     int argc, char **argv));
 static int
-GetPageWidth	(Tki_Editor *editor, Tcl_Interp *interp, 
-			     int argc, char **argv);
+GetPageWidth	_ANSI_ARGS_((Tki_Editor *editor, Tcl_Interp *interp, 
+			     int argc, char **argv));
 static int
-GetPageHeight	(Tki_Editor *editor, Tcl_Interp *interp, 
-			     int argc, char **argv);
+GetPageHeight	_ANSI_ARGS_((Tki_Editor *editor, Tcl_Interp *interp, 
+			     int argc, char **argv));
 static int
-Toplevel	(Tki_Editor *editor, Tcl_Interp *interp, 
-			     int argc, char **argv);
+Toplevel	_ANSI_ARGS_((Tki_Editor *editor, Tcl_Interp *interp, 
+			     int argc, char **argv));
 static int
-DirName		(Tki_Editor *editor, Tcl_Interp *interp,
-			     int argc, char **argv);
+DirName		_ANSI_ARGS_((Tki_Editor *editor, Tcl_Interp *interp,
+			     int argc, char **argv));
 static int
-FileName	(Tki_Editor *editor, Tcl_Interp *interp,
-			     int argc, char **argv);
+FileName	_ANSI_ARGS_((Tki_Editor *editor, Tcl_Interp *interp,
+			     int argc, char **argv));
 static int
-Cut		(Tki_Editor *editor, Tcl_Interp *interp, 
-			     int argc, char **argv);
+Cut		_ANSI_ARGS_((Tki_Editor *editor, Tcl_Interp *interp, 
+			     int argc, char **argv));
 static int
-Copy		(Tki_Editor *editor, Tcl_Interp *interp, 
-			     int argc, char **argv);
+Copy		_ANSI_ARGS_((Tki_Editor *editor, Tcl_Interp *interp, 
+			     int argc, char **argv));
 static int
-Paste		(Tki_Editor *editor, Tcl_Interp *interp, 
-			     int argc, char **argv);
+Paste		_ANSI_ARGS_((Tki_Editor *editor, Tcl_Interp *interp, 
+			     int argc, char **argv));
 static int
-ClearEditor	(Tki_Editor *editor, Tcl_Interp *interp, 
-			     int argc, char **argv);
+ClearEditor	_ANSI_ARGS_((Tki_Editor *editor, Tcl_Interp *interp, 
+			     int argc, char **argv));
 static int
-GetColor	(Tki_Editor *editor, Tcl_Interp *interp,
-			     int argc, char **argv);
+GetColor	_ANSI_ARGS_((Tki_Editor *editor, Tcl_Interp *interp,
+			     int argc, char **argv));
 static void
-ReadHistory	(Tki_Editor *editor, Tcl_Interp *interp);
+ReadHistory	_ANSI_ARGS_((Tki_Editor *editor, Tcl_Interp *interp));
 
 static void
-WriteHistory	(Tki_Editor *editor, Tcl_Interp *interp);
+WriteHistory	_ANSI_ARGS_((Tki_Editor *editor, Tcl_Interp *interp));
 
 static void
-ExpandIconName	(Tki_Editor *editor, Tcl_Interp *interp,
-			     int type, char *str);
+ExpandIconName	_ANSI_ARGS_((Tki_Editor *editor, Tcl_Interp *interp,
+			     int type, char *str));
 static void
-ReadDefaultFile	(Tki_Editor *editor, Tcl_Interp *interp,
-			     char *filename);
+ReadDefaultFile	_ANSI_ARGS_((Tki_Editor *editor, Tcl_Interp *interp,
+			     char *filename));
 static void
-ReadDefaults	(Tki_Editor *editor, Tcl_Interp *interp,
-			     int argc, char **argv);
+ReadDefaults	_ANSI_ARGS_((Tki_Editor *editor, Tcl_Interp *interp,
+			     int argc, char **argv));
 static int
-LoadMap		(Tki_Editor *editor, Tcl_Interp *interp, 
-			     int argc, char **argv);
+LoadMap		_ANSI_ARGS_((Tki_Editor *editor, Tcl_Interp *interp, 
+			     int argc, char **argv));
 static int
-SaveMap		(Tki_Editor *editor, Tcl_Interp *interp, 
-			     int argc, char **argv);
+SaveMap		_ANSI_ARGS_((Tki_Editor *editor, Tcl_Interp *interp, 
+			     int argc, char **argv));
 static int
-DeleteEditor	(Tki_Editor *editor, Tcl_Interp *interp,
-			     int argc, char **argv);
+DeleteEditor	_ANSI_ARGS_((Tki_Editor *editor, Tcl_Interp *interp,
+			     int argc, char **argv));
 static int
-QuitEditor	(Tki_Editor *editor, Tcl_Interp *interp,
-			     int argc, char **argv);
+QuitEditor	_ANSI_ARGS_((Tki_Editor *editor, Tcl_Interp *interp,
+			     int argc, char **argv));
 static int 
-EditorCommand	(ClientData clientData, Tcl_Interp *interp,
-			     int argc, char **argv);
+EditorCommand	_ANSI_ARGS_((ClientData clientData, Tcl_Interp *interp,
+			     int argc, char **argv));
 /*
  * Create a new editor object. No Parameters are expected.
  */
 
 int 
-Tki_CreateEditor (ClientData clientData, Tcl_Interp *interp, int argc, char **argv)
+Tki_CreateEditor (clientData, interp, argc, argv)
+    ClientData clientData;
+    Tcl_Interp *interp;
+    int argc;
+    char **argv;
 {
     Tki_Editor *editor;
     static unsigned lastid = 0;
@@ -177,7 +181,8 @@ Tki_CreateEditor (ClientData clientData, Tcl_Interp *interp, int argc, char **ar
  */
 
 void 
-Tki_DeleteEditor (ClientData clientData)
+Tki_DeleteEditor (clientData)
+     ClientData clientData;
 {
     Tki_Editor *editor = (Tki_Editor *) clientData;
     Tcl_HashEntry *entryPtr;
@@ -327,7 +332,11 @@ WriteHistory (editor, interp)
  */
 
 static int 
-GetId (Tki_Editor *editor, Tcl_Interp *interp, int argc, char **argv)
+GetId (editor, interp, argc, argv)
+    Tki_Editor *editor;
+    Tcl_Interp *interp;
+    int argc;
+    char **argv;
 {
     interp->result = editor->id;
     return TCL_OK;
@@ -351,8 +360,9 @@ Toplevel (editor, interp, argc, argv)
 	fprintf (stderr, interp->result);
 	Tcl_ResetResult (interp);
     }
-
-    interp->result = editor->toplevel;
+    //fprintf (stderr, editor->toplevel);
+    //interp->result = editor->toplevel;
+    Tcl_SetResult(interp, editor->toplevel,TCL_VOLATILE);
     return TCL_OK;
 }
 
@@ -452,6 +462,7 @@ GetColor (editor, interp, argc, argv)
     int argc;
     char **argv;
 {
+
     sprintf (interp->result, "%d", editor->color);
 
     return TCL_OK;
@@ -616,7 +627,7 @@ Tki_EditorPageSize (editor, interp, argc, argv)
 	Tcl_Eval (interp, buffer);
 	Tcl_ResetResult (interp);
     }
-
+ 
     interp->result = editor->pagesize;
 
     return TCL_OK;
@@ -662,9 +673,10 @@ Tki_EditorOrientation (editor, interp, argc, argv)
     }
 
     if (editor->landscape) {
-	interp->result = "landscape";
+	Tcl_SetResult(interp,"landscape",TCL_VOLATILE);
     } else {
-	interp->result = "portrait";
+	Tcl_SetResult(interp,"portrait",TCL_VOLATILE);
+
     }
 
     return TCL_OK;
@@ -698,7 +710,10 @@ Tki_EditorAttribute (editor, interp, argc, argv)
 
     entryPtr = Tcl_FindHashEntry (&(editor->attr), argv[0]);
     if (entryPtr != NULL) {
-	interp->result = (char *) Tcl_GetHashValue (entryPtr);
+	if (tki_Debug) 
+	    fprintf(stderr, "set result from Hash\n");
+	//interp->result = (char *) Tcl_GetHashValue (entryPtr);
+	Tcl_SetResult(interp,(char *) Tcl_GetHashValue (entryPtr),TCL_STATIC);
     } else {
 	Tcl_ResetResult (interp);
     }
@@ -708,9 +723,10 @@ Tki_EditorAttribute (editor, interp, argc, argv)
 	    fprintf (stderr, "++ %s attribute %s = %s\n", 
 		     editor->id, argv[0], argv[1]);
 	} else {
-	    fprintf (stderr, "-- %s attribute %s (%s)\n",
-		      editor->id, argv[0], interp->result);
+	    fprintf (stderr, "-- %s attribute from interp %s (%s)\n",
+		      editor->id, argv[0], Tcl_GetStringResult(interp));
 	}
+	
     }
 
     return TCL_OK;
@@ -790,11 +806,14 @@ do_dump (editor, interp, object, dstp)
     Tki_Object *object;
     Tcl_DString *dstp;
 {
+
     if (! object || object->done) return;
 
     switch (object->type) {
       case TKINED_NODE: 
+	
 	Tki_DumpObject (interp, object);
+	
 	break;
       case TKINED_NETWORK:
 	Tki_DumpObject (interp, object);
@@ -852,15 +871,19 @@ do_dump (editor, interp, object, dstp)
       default:
 	Tcl_ResetResult (interp);
     }
-    if (*interp->result != '\0') {
-	Tcl_DStringAppend (dstp, interp->result, -1);
+    
+    if (Tcl_GetStringResult(interp) != '\0'){
+	Tcl_DStringAppend (dstp, Tcl_GetStringResult(interp), -1);
 	Tcl_DStringAppend (dstp, "\n", 1);
     }
+    
 
     object->done = 1;
 
     Tcl_ResetResult (interp);
+
 }
+
 
 /*
  * Copy the current selection or all objects belonging to this editor
@@ -897,12 +920,16 @@ Copy (editor, interp, argc, argv)
 
     entryPtr = Tcl_FirstHashEntry(&tki_ObjectTable, &search);
     while (entryPtr != NULL) {
+	
 	object = (Tki_Object *) Tcl_GetHashValue (entryPtr);
 	if (object->editor == editor && (object->selected || force)) {
 	    if (object->type != TKINED_INTERPRETER) {
+		
 		do_dump (editor, interp, object, &clip);
+		
 	    }
 	}
+	
 	entryPtr = Tcl_NextHashEntry (&search);
     }
 
@@ -916,7 +943,10 @@ Copy (editor, interp, argc, argv)
  */
 
 static int
-do_ined (Tki_Editor *editor, Tcl_Interp *interp, char *line)
+do_ined (editor, interp, line)
+    Tki_Editor *editor;
+    Tcl_Interp *interp;
+    char *line;
 {
     int largc;
     char **largv;
@@ -961,7 +991,10 @@ do_ined (Tki_Editor *editor, Tcl_Interp *interp, char *line)
 }
 
 static int
-do_set (Tki_Editor *editor, Tcl_Interp *interp, char *line)
+do_set (editor, interp, line)
+    Tki_Editor *editor;
+    Tcl_Interp *interp;
+    char *line;
 {
     int len;
     char *var;
@@ -995,10 +1028,13 @@ do_set (Tki_Editor *editor, Tcl_Interp *interp, char *line)
     if (line[len] != ']') return TCL_ERROR;     /* remove ]                 */
     line[len] = '\0';
 
-    if (do_ined (editor, interp, line) == TCL_OK) {
-	line = Tcl_SetVar (interp, var, interp->result, TCL_GLOBAL_ONLY);
+
+if (do_ined (editor, interp, line) == TCL_OK) {
+	if (tki_Debug)
+
+	line = Tcl_SetVar (interp, var, Tcl_GetStringResult(interp), TCL_GLOBAL_ONLY);
 	if (line) {
-	    Tki_Object *object = Tki_LookupObject (interp->result);
+	    Tki_Object *object = Tki_LookupObject (Tcl_GetStringResult(interp));
 	    if (object) object->loaded = 1;
 	    return TCL_OK;
 	}
@@ -1288,7 +1324,10 @@ ExpandIconName (editor, interp, type, str)
  */
 
 static void
-ReadDefaultFile (Tki_Editor *editor, Tcl_Interp *interp, char *filename)
+ReadDefaultFile (editor, interp, filename)
+    Tki_Editor *editor;
+    Tcl_Interp *interp;
+    char *filename;
 {
     FILE *f;
 
@@ -1366,7 +1405,11 @@ ReadDefaultFile (Tki_Editor *editor, Tcl_Interp *interp, char *filename)
  */
 
 static void
-ReadDefaults (Tki_Editor *editor, Tcl_Interp *interp, int argc, char **argv)
+ReadDefaults (editor, interp, argc, argv)
+    Tki_Editor *editor;
+    Tcl_Interp *interp;
+    int argc;
+    char **argv;
 {
     char *library;
     char *fname;
@@ -1515,7 +1558,8 @@ SaveMap (editor, interp, argc, argv)
 	if (object->editor == editor && (object->type == TKINED_INTERPRETER)) {
 	    if (strlen(object->action) != 0) {
 		Tki_DumpObject (interp, object);
-		fputs (interp->result, f);
+		//fputs (interp->result, f);
+		fputs(Tcl_GetStringResult(interp),f);
 		fputs ("\n", f);
 		Tcl_ResetResult (interp);
 	    }
@@ -1638,7 +1682,11 @@ static Method methodTable[] = {
  */
 
 static int
-EditorCommand (ClientData clientData, Tcl_Interp *interp, int argc, char **argv)
+EditorCommand (clientData, interp, argc, argv)
+    ClientData clientData;
+    Tcl_Interp *interp;
+    int argc;
+    char **argv;
 {
     Tki_Editor *editor = (Tki_Editor *) clientData;
     Method *ds;
@@ -1675,4 +1723,3 @@ EditorCommand (ClientData clientData, Tcl_Interp *interp, int argc, char **argv)
 
     return TCL_ERROR;
 }
-
