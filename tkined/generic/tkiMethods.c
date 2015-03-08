@@ -2273,7 +2273,7 @@ m_icon (interp, object, argc, argv)
     char **argv;
 {
     char *tmp = "reset";
-    char objectIcon[20];
+    char objectIcon[50];
     int selected = object->selected;
 
     if (argc == 1) {
@@ -2287,13 +2287,15 @@ m_icon (interp, object, argc, argv)
 	if (tki_Debug)
 	    fprintf(stderr,"process object icon\n");
 
-	strcpy(objectIcon,Tcl_GetStringResult(interp));	
+
 	
 	Tki_EditorAttribute (editor, interp, 1, &buffer);
+	
+	strcpy(objectIcon,Tcl_GetStringResult(interp));		
 	if (*objectIcon != '\0'){	
-	//if (*interp->result != '\0') {
-	    //STRCOPY (object->icon, interp->result);
+	    
 	    STRCOPY (object->icon, objectIcon);
+	
 	} else {
 	    if (argv[0][0] != '\0') {
 		STRCOPY (object->icon, argv[0]);
