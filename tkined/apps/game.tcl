@@ -42,7 +42,8 @@ proc random {} {
 proc save_score {time} {
     global score_file tnm
     set f [open $score_file a]
-    puts $f "$time $tnm(user) [clock format [clock seconds]]"
+## puts $f "$time $tnm(user) [clock format [clock seconds]]"    
+   puts $f "$time $tnm(user) "
     close $f
     ined acknowledge "You needed $time seconds."
 }

@@ -16,7 +16,6 @@ exec tclsh "$0" "$@"
 # @(#) $Id: manager.tcl,v 1.1.1.1 2006/12/07 12:16:59 karl Exp $
 
 package require Tnm 3.0
-
 namespace import Tnm::*
 
 ined size

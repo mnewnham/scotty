@@ -3,7 +3,7 @@
 exec tclsh "$0" "$@"
 #
 # ip_discover.tcl -
-#
+#ip
 #	A script to discover the structure of IP networks. This script 
 #	implements an algorithm that tries to figure out the topology 
 #	without using SNMP. A paper which is descibes this script has
@@ -1177,12 +1177,18 @@ proc "Discover IP Network" {list} {
 
     set hostname $tnm(host)
     set ip [nslook $hostname]
-    writeln [clock format [clock seconds]]
+    set startTime [clock seconds]
+    #writeln $startTime
+
+    #set startClock [clock format $startTime -gmt 0 -format "%a"]   #set formattedTime [clock format $startTime]
+    
     writeln "Discover $nets from $hostname \[$ip\]"
     set start [clock seconds]
 
     foreach network $nets { discover_nodes $network }
+   
     if {[info exists nodes]} {
+	
 	discover_traces
 	discover_masks
 	discover_snmp
@@ -1236,7 +1242,6 @@ proc "Discover Route" {list} {
 
     set new_ips ""
     foreach ip [lindex $ips 1] {
-
 	if {[lsearch $new_ips $ip] >= 0} continue
 	lappend new_ips $ip
 
@@ -1256,7 +1261,10 @@ proc "Discover Route" {list} {
 
     set hostname $tnm(host)
     set ip [nslook $hostname]
-    writeln [clock format [clock seconds]]
+    #set startTime [clock format [clock seconds]]
+    #writeln "Start at $startTime"
+    #writeln [clock format [clock seconds]]
+    #writeln clock format [clock seconds]
     writeln "discover route to $ips from $hostname \[$ip\]"
     set start [clock seconds]
 
@@ -1435,7 +1443,11 @@ proc ined_create {host user} {
 	set ip [nslook $hostname]
 	set ips [lindex [nslook $host] 0]
 	create_node $ips
-	writeln [clock format [clock seconds]]
+	#set startTime [clock format [clock seconds]]
+    	#writeln "Start at $startTime"
+    	#writeln [clock format [clock seconds]]
+        #writeln clock format [clock seconds]
+
 	writeln "discover route to $ips from $hostname \[$ip\]"
 	set start [clock seconds]
 	

@@ -824,16 +824,18 @@ proc "Storage Utilization" { list } {
 ##
 
 proc TrapSinkProc {s src vbl} {
-    writeln "[clock format [clock seconds]] [$s cget -version] trap from \[$src\]:"
+    writeln "[$s cget -version] trap from \[$src\]:"
+    ##writeln "[clock format [clock seconds]] [$s cget -version] trap from \[$src\]:"
     foreach vb $vbl {
-	writeln "  [mib name [lindex $vb 0]] = [lindex $vb 2]"
+	writeln "[clock seconds]  [mib name [lindex $vb 0]] = [lindex $vb 2]"
     }
     writeln
     ForeachIpNode id ip host [ined -noupdate retrieve] {
 	if {$ip == $src} {
 	    set trap [lindex [lindex $vbl 1] 2]
 	    set name "[$s cget -version] Trap"
-	    ined -noupdate attribute $id $name "$trap at [clock format [clock seconds]]"
+#ined -noupdate attribute $id $name "$trap at [clock format [clock seconds]]"
+	    ined -noupdate attribute $id $name "$trap at [clock seconds]"
 	    ined -noupdate label $id $name
 	    ined -noupdate flash $id 10
 	}

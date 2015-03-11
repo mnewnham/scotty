@@ -11,6 +11,11 @@
 # of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 
 ##
+## This is where we a going to write alerts into the sqlite database
+##
+
+package require sqlite3
+##
 ## =========================================================================
 ## =================== T K I N E D   related subroutines ===================
 ## =========================================================================
@@ -445,7 +450,7 @@ proc MoJoModify {} {
 		    [list "Falling Threshold:" $falling entry 10] \
 		    [list "Rising Threshold:" $rising entry 10] \
 		    [list "Threshold action:" \
-		          $action check syslog flash write] ] \
+		          $action check syslog flash write spice-write] ] \
 	      [list modify "kill job" cancel] ]
     
     if {[lindex $res 0] == "cancel"} return
@@ -560,6 +565,19 @@ proc MoJoAction { id msg } {
 	}
     }
 
+    if {[lsearch $action spice-write] >= 0} {
+	##
+        ## Do something to spiceworks
+        ##
+	##writeln "[clock format [clock seconds]]:"
+	writeln $msg
+	writeln	"spice write"
+	sqlite3 db1 /home/mark/scotty-db
+	db1 eval {INSERT INTO alerts (message) VALUES('an alert to do something')}
+	db1 close
+	
+
+    }
     if {[lsearch $action syslog] >= 0} {
 	syslog warning $msg
     }
@@ -573,7 +591,7 @@ proc MoJoAction { id msg } {
 	ined flash $id $secs
     }
     if {[lsearch $action write] >= 0} {
-	writeln "[clock format [clock seconds]]:"
+	#writeln "[clock format [clock seconds]]:"
 	writeln $msg
 	writeln
     }

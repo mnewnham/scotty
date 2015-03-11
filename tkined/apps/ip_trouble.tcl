@@ -705,7 +705,8 @@ proc EtherProc {} {
 
 	append txt \
 		[format "\nTraffic: %.3f MBit/s %.1f Packets/s   Time: %s   Interval: %.1f s\n" \
-		$mbits_per_s $packets_per_s [clock format [clock seconds] -format %X] $time]
+$mbits_per_s $packets_per_s $time]		
+#$mbits_per_s $packets_per_s [clock format [clock seconds] -format %X] $time]
 	append txt \
 		[format "Distribution: icmp %.2f %% udp %.2f %% tcp %.2f %% arp %.2f %% other %.2f %%\n\n" \
 		$icmp_p $udp_p $tcp_p $arp_p $other_p]
