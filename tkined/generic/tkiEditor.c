@@ -15,6 +15,7 @@
 #include "tkined.h"
 #include "tkiPort.h"
 
+
 Tcl_DString clip;                        /* the global clipboard */
 static int force = 0;                    /* force a full dump */
 static int numEditors = 0;               /* the number of editor objects */
@@ -1223,15 +1224,25 @@ ExpandIconName (editor, interp, type, str)
     char *argv[2];
     char *path;
 
+ 
+
     while (*name && !isspace(*name)) name++;
+    
     if (*name == '\0') return;
 
     *name = '\0';
     name++;
 
+  
     while (*name && isspace(*name)) name++;
     if (*name == '\0') return;
 
+    /*
+     * Skip elements that are 'EMPTY'
+     */
+     if (strstr(name,"EMPTY"))
+	return;
+    
     /*
      * Skip leading elements that are separated with colons.
      */
@@ -1245,6 +1256,7 @@ ExpandIconName (editor, interp, type, str)
 	}
     }
 
+       
     /*
      * Make our own copy since findfile will reuse the buffer space!
      */
@@ -1360,8 +1372,11 @@ ReadDefaultFile (editor, interp, filename)
     Tki_Editor *editor;
     Tcl_Interp *interp;
     char *filename;
+
 {
     FILE *f;
+    int replacementNumber = 0;
+    char *replacementString;
 
     if (filename == NULL) return;
 
@@ -1372,6 +1387,8 @@ ReadDefaultFile (editor, interp, filename)
 	char *p, *value;
 	char *name = buffer;
 	char *largv[2];
+	
+       
 	
 	while (*name && isspace(*name)) name++;
 	if (*name == '\0') continue;
@@ -1384,7 +1401,10 @@ ReadDefaultFile (editor, interp, filename)
 	if (*name == '#' 
 	    || *name == '!' 
 	    || strlen(name) < 8 
-	    || (strncmp(name, "tkined.", 7) != 0)) continue;
+	    || (strncmp(name, "tkined.", 7) != 0)) 
+		continue;
+	
+        
 	
 	name += 7;
 	p = name;
@@ -1405,9 +1425,34 @@ ReadDefaultFile (editor, interp, filename)
 	    value[len] = '\0';
 	    len--;
 	}
-	
+
+	/*
+         * replace the number of the icon with
+           an increasing value and discard 
+           empty ones 
+         */
+	if (strcmp(value,"EMPTY") == NULL)
+	    continue;
+       
+	if (strstr(name,"node") != NULL){
+	    /*
+             * strip off the number at the back
+             */
+	    len = strlen(name)-1;
+	    while (len > 0 && isdigit(name[len])) {
+	        name[len] = '\0';
+	        len--;
+	    }
+            /*
+             * Add the incrementing replacement
+             */
+             replacementNumber++;
+	     sprintf(name,"%s%d",name,replacementNumber);
+	   
+     	}
 	largv[0] = name;
 	largv[1] = value;
+
 	Tki_EditorAttribute (editor, interp, 2, largv);
 	
 	/*
@@ -1426,6 +1471,7 @@ ReadDefaultFile (editor, interp, filename)
 	} else if (strncmp (name, "reference", 9) == 0) {
 	    ExpandIconName (editor, interp, TKINED_REFERENCE, value);
 	}
+	
     }
     
     fclose (f);
