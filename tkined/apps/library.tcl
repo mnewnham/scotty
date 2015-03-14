@@ -10,11 +10,7 @@
 # See the file "license.terms" for information on usage and redistribution
 # of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 
-##
-## This is where we a going to write alerts into the sqlite database
-##
 
-package require sqlite3
 ##
 ## =========================================================================
 ## =================== T K I N E D   related subroutines ===================
@@ -147,9 +143,15 @@ proc write {{txt ""} {cmd ""}} {
 ## into a another body if we get an error.
 ##
 
-proc try {body args} {
+## KMN 03/14/2015
+## This global function "try" appears to be interfering with the normal
+## error handling functions in later versions of tcl so it has been
+## renamed. It should never be called
+
+proc xtry {body args} {
     if {$args != "" && [llength $args] != 2} {
 	error "wrong # args: should be \"try body ?msg handler?\""
+
     }
     if {$args == ""} {
 	catch [list uplevel 1 $body]
@@ -565,19 +567,7 @@ proc MoJoAction { id msg } {
 	}
     }
 
-    if {[lsearch $action spice-write] >= 0} {
-	##
-        ## Do something to spiceworks
-        ##
-	##writeln "[clock format [clock seconds]]:"
-	writeln $msg
-	writeln	"spice write"
-	sqlite3 db1 /home/mark/scotty-db
-	db1 eval {INSERT INTO alerts (message) VALUES('an alert to do something')}
-	db1 close
-	
-
-    }
+    
     if {[lsearch $action syslog] >= 0} {
 	syslog warning $msg
     }
@@ -591,7 +581,7 @@ proc MoJoAction { id msg } {
 	ined flash $id $secs
     }
     if {[lsearch $action write] >= 0} {
-	#writeln "[clock format [clock seconds]]:"
+	writeln "[clock format [clock seconds]]:"
 	writeln $msg
 	writeln
     }

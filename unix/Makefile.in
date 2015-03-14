@@ -430,7 +430,7 @@ TKI_APPS =	$(TKI_APPS_DIR)/manager.tcl \
 		$(TKI_APPS_DIR)/snmp_cisco.tcl \
 		$(TKI_APPS_DIR)/snmp_hp.tcl \
 		$(TKI_APPS_DIR)/snmp_ucd.tcl \
-		$(TKI_APPS_DIR)/clock.tcl \
+		$(TKI_APPS_DIR)/scotty_clock.tcl \
 		$(TKI_APPS_DIR)/game.tcl
 
 TKI_MISC =	$(TKI_APPS_DIR)/library.tcl \

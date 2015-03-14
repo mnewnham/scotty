@@ -1177,10 +1177,8 @@ proc "Discover IP Network" {list} {
 
     set hostname $tnm(host)
     set ip [nslook $hostname]
-    set startTime [clock seconds]
-    #writeln $startTime
-
-    #set startClock [clock format $startTime -gmt 0 -format "%a"]   #set formattedTime [clock format $startTime]
+  
+    writeln "Start At [ clock format [ clock seconds ]]"
     
     writeln "Discover $nets from $hostname \[$ip\]"
     set start [clock seconds]
@@ -1261,10 +1259,8 @@ proc "Discover Route" {list} {
 
     set hostname $tnm(host)
     set ip [nslook $hostname]
-    #set startTime [clock format [clock seconds]]
-    #writeln "Start at $startTime"
-    #writeln [clock format [clock seconds]]
-    #writeln clock format [clock seconds]
+   
+    writeln "Start at [clock format [clock seconds]]"
     writeln "discover route to $ips from $hostname \[$ip\]"
     set start [clock seconds]
 
@@ -1443,13 +1439,11 @@ proc ined_create {host user} {
 	set ip [nslook $hostname]
 	set ips [lindex [nslook $host] 0]
 	create_node $ips
-	#set startTime [clock format [clock seconds]]
-    	#writeln "Start at $startTime"
-    	#writeln [clock format [clock seconds]]
-        #writeln clock format [clock seconds]
-
-	writeln "discover route to $ips from $hostname \[$ip\]"
-	set start [clock seconds]
+	
+    	writeln "Start at [clock format [clock seconds]]"
+    	writeln "discover route to $ips from $hostname \[$ip\]"
+	
+        set start [clock seconds]
 	
 	if {[info exists nodes]} {
 	    discover_traces

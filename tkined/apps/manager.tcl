@@ -383,7 +383,7 @@ proc "Delete Tools" { list } {
 ## that should not appear on other sites.
 ##
 
-set cmds [list "IP Trouble" "IP Monitor" "IP Layout" "IP Discover" "IP World" ""]
+set cmds [list "IP Trouble" "IP Monitor" "IP Layout" "IP Discover" "IP World" "" ]
 if {[lsearch [info commands] snmp] >= 0} {
     lappend cmds "SNMP Trouble"
     lappend cmds "SNMP Monitor"
