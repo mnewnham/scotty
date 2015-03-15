@@ -122,12 +122,12 @@ TK_DBGX = @TK_DBGX@
 # Linker switch(es) to link platform depended library archives (the
 # configure script will try to set this value automatically, but you
 # can override it).
-LIBS = @LIBS@ # -lresolv
+LIBS = @LIBS@  -lresolv
 
 # Linker switch(s) to link platform depended library archives for
 # package utilities (the configure script will try to set this value
 # automatically as well, but you can override it).
-NM_LIBS = @NM_LIBS@ # -lresolv
+NM_LIBS = @NM_LIBS@  -lresolv
 
 # To disable ANSI-C procedure prototypes reverse the comment 
 # characters on the following lines:
